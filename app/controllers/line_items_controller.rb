@@ -7,7 +7,19 @@ class LineItemsController < ApplicationController
     def new
       @line_item = @line_item_date.line_items.build
     end
-  
+
+    def edit
+    end
+
+    def update
+      if @line_item.update(line_item_params)
+        redirect_to quote_path(@quote), notice: "Item was successfully updated."
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
+
     def create
       @line_item = @line_item_date.line_items.build(line_item_params)
   
@@ -20,6 +32,10 @@ class LineItemsController < ApplicationController
   
     private
   
+    def set_line_item
+      @line_item = @line_item_date.line_items.find(params[:id])
+    end
+
     def line_item_params
       params.require(:line_item).permit(:name, :description, :quantity, :unit_price)
     end
