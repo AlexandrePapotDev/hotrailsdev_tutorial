@@ -14,18 +14,23 @@ class LineItemsController < ApplicationController
 
     def update
       if @line_item.update(line_item_params)
-        redirect_to quote_path(@quote), notice: "Item was successfully updated."
+        respond_to do |format|
+          format.html { redirect_to quote_path(@quote), notice: "Item was successfully updated." }
+          format.turbo_stream { flash.now[:notice] = "Item was successfully updated." }
+        end
       else
         render :edit, status: :unprocessable_entity
       end
     end
 
-
     def create
       @line_item = @line_item_date.line_items.build(line_item_params)
   
       if @line_item.save
-        redirect_to quote_path(@quote), notice: "Item was successfully created."
+        respond_to do |format|
+          format.html { redirect_to quote_path(@quote), notice: "Item was successfully created." }
+          format.turbo_stream { flash.now[:notice] = "Item was successfully created." }
+        end
       else
         render :new, status: :unprocessable_entity
       end
